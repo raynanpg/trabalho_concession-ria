@@ -85,21 +85,24 @@ def menu():
     print("4 - Ver saldo")
     print("0 - Sair")
 
+
 def vender_carro():
 
     print("\nCarros que temos interesse em comprar: ")
 
-    for marca, modelo in carros_cliente_vender:
-        print(f"\n- {marca} {modelo}")
-    
-    marca = input(f"\nDigite a marca do carro que deseja vender: ")
-    modelo = input("Digite o modelo do carro: ")
+    for i, (marca, modelo) in enumerate(carros_cliente_vender, start = 1):
+        print(f"{i} - {marca} {modelo}")
 
-    if (marca,modelo) not in carros_cliente_vender:
-        print("\nDesculpe, não compramos este carro. Venda não realiazada.")
+    escolha = int(input("\nDigite o número do carro que deseja vender: "))
+
+    if escolha < 1 or escolha > len(carros_cliente_vender):
+        print("\nNúmero inválido!")
         return
     
+    marca, modelo = carros_cliente_vender[escolha - 1]
 
+    print(f"\nVocê escolheu vender: {marca} {modelo}")
+    
     valor_total = carros_precos[marca][modelo]
     proposta = valor_total * 0.88
 
@@ -116,8 +119,9 @@ def vender_carro():
         if (marca, modelo) not in carros_para_venda:
 
             carros_para_venda.append((marca, modelo))
-
+        
     else:
+
         print("\nVenda cancelada.")
 
 
@@ -125,15 +129,46 @@ def alugar_carro():
 
     print("\n=== CARROS PARA ALUGAR ===")
 
-    for marca, modelo in carros_aluguel:
-        print(f"{marca} {modelo}")
+    marcas1 = ["Audi", "BYD", "Chevrolet"]
 
-    marca = input("\nQual a marca do carro que deseja alugar? ")
-    modelo = input("Qual o modelo do carro? ")
+    for i, marca in enumerate(marcas1, start=1):
+        print(f"{i} - {marca}")
 
-    print(f"\nVocê escolheu: {marca} {modelo}")
+    escolha_marca1 = input("\nDigite o número da marca desejada: ").strip()
+    numeros_marca1 = [str(i) for i in range(1, len(marcas1) + 1)]
 
-    dias = int(input("Por quantos dias você deseja alugar este carro? "))
+    if escolha_marca1 not in numeros_marca1:
+        print("\nNúmero de marca inválido!")
+        return
+
+    escolha_marca1 = int(escolha_marca1)
+    marca_escolhida1 = marcas1[escolha_marca1 - 1]
+
+
+    modelos1 = [modelo for (marca, modelo) in carros_aluguel if marca == marca_escolhida1]
+
+    if not modelos1:
+        print(f"\nNenhum modelo disponível da marca {marca_escolhida1} no momento!")
+        return
+    
+    print(f"\n=== MODELOS DISPONÍVEIS DE {marca_escolhida1} ===\n")
+
+    for i, modelo in enumerate(modelos1, start=1):
+        print(f"{i} - {modelo}")
+
+    escolha_modelo1 = input("\nDigite o número do modelo desejado: ").strip()
+    numeros_modelo1 = [str(i) for i in range(1, len(modelos1)+1)]
+
+    if escolha_modelo1 not in numeros_modelo1:
+        print("\nNúmero de modelo inválido!")
+        return
+    
+    escolha_modelo1 = int(escolha_modelo1)
+    modelo_escolhido1 = modelos1[escolha_modelo1 - 1]
+
+    print(f"\nVocê escolheu: {marca_escolhida1} {modelo_escolhido1}")    
+
+    dias = int(input("\nPor quantos dias você deseja alugar este carro? "))
 
     dias_totais = dias * 77
 
@@ -153,39 +188,67 @@ def alugar_carro():
 
         print("Aluguel cancelado.")
 
+    
 def comprar_carro():
 
-    print("\n=== CARROS DISPONÍVEIS PARA COMPRA ===\n")
+    print("\n=== ESCOLHA A MARCA DO CARRO ===")
 
-    for marca, modelo in carros_para_venda:
-        print(f"{marca} {modelo}")
 
-    marca = input("\nInforme a marca do carro que deseja comprar: ")
-    modelo = input("Informe o modelo do carro: ")
+    marcas = ["Audi", "BYD", "Chevrolet"]
 
-    print(f"\nVocê escolheu {marca} {modelo}")
+    for i, marca in enumerate(marcas, start=1):
+        print(f"{i} - {marca}")
 
-    valor_total2 = carros_precos[marca][modelo]
+    escolha_marca = input("\nDigite o número da marca desejada: ").strip()
+    numeros_marca = [str(i) for i in range(1, len(marcas)+1)]
 
-    valor_final = valor_total2 * 1.25
+    if escolha_marca not in numeros_marca:
+        print("\nNúmero de marca inválido!")
+        return
 
-    print(f"\nO valor total da compra é de: R$ {valor_final:.2f}")
+    escolha_marca = int(escolha_marca)
+    marca_escolhida = marcas[escolha_marca - 1]
+
+    modelos = [modelo for (marca, modelo) in carros_para_venda if marca == marca_escolhida]
+
+    if not modelos:
+        print(f"\nNenhum modelo disponível da marca {marca_escolhida} no momento!")
+        return
+
+    print(f"\n=== MODELOS DISPONÍVEIS DE {marca_escolhida} ===\n")
+    for i, modelo in enumerate(modelos, start=1):
+        print(f"{i} - {modelo}")
+
+    escolha_modelo = input("\nDigite o número do modelo desejado: ").strip()
+    numeros_modelo = [str(i) for i in range(1, len(modelos)+1)]
+
+    if escolha_modelo not in numeros_modelo:
+        print("\nNúmero de modelo inválido!")
+        return
+
+    escolha_modelo = int(escolha_modelo)
+    modelo_escolhido = modelos[escolha_modelo - 1]
+
+    print(f"\nVocê escolheu: {marca_escolhida} {modelo_escolhido}")
+
+    valor_base = carros_precos[marca_escolhida][modelo_escolhido]
+    valor_final = valor_base * 1.25
+
+    print(f"\nValor final da compra: R$ {valor_final:.2f}")
 
     if cliente["saldo"] < valor_final:
-        print("Saldo insuficiente!")
+        print("\nSaldo insuficiente!")
         return
-    
-    confirmacao = input("Confirmar compra (s/n)? ").lower()
 
-    if confirmacao == "s":
+    if input("Confirmar compra (s/n)? ").lower() == "s":
         cliente["saldo"] -= valor_final
+        carros_para_venda.remove((marca_escolhida, modelo_escolhido))
+        print("\nCompra realizada com sucesso!")
 
-        carros_para_venda.remove((marca, modelo))
-
-        print("\nCompra feita!")
-    
     else:
         print("\nCompra cancelada.")
+
+
 
 while True:
     menu()
@@ -200,7 +263,6 @@ while True:
         case "3":
             comprar_carro()
         case "4":
-            print(f"\nSeu saldo atual é: R$ {cliente['saldo']:.2f}")
+            print(f"\nSeu saldo atual é: R$ {cliente["saldo"]:.2f}")
         case "0":
-            print("Obrigado por visitar nossa concessionária. Até logo!")
-
+            print("Obrigado por visitar a acerela. Até logo!")
