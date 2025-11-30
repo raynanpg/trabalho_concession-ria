@@ -266,3 +266,4 @@ while True:
             print(f"\nSeu saldo atual é: R$ {cliente["saldo"]:.2f}")
         case "0":
             print("Obrigado por visitar a acerela. Até logo!")
+            break
